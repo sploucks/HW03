@@ -1,0 +1,89 @@
+#include <math.h>
+#include <stdio.h>
+
+//global function declarations
+double userInput(double *hei, double *vel, double *ang);
+double timeMax_func(double vel, double ang);
+double heightMax_func(double hei, double vel, double ang, double tim);
+double timeGround_func(double heiI, double vel, double ang);
+double distTraveled_func(double vel, double ang, double tim);
+double displayResult(double timM, double heiM, double timG, double distT);
+
+int main()
+{
+    //variable declarations
+    double angle;
+    double heightInitial;
+    double heightMax;
+    double velocity;
+    double acceleration;
+    double timeMax;
+    double timeGround;
+    double distTraveled;
+    
+    //function calls
+    userInput(&heightInitial, &velocity, &angle);
+    timeMax = timeMax_func(velocity, angle);
+    heightMax = heightMax_func(heightInitial, velocity, angle, timeMax);
+    timeGround = timeGround_func(heightInitial, velocity, angle);
+    distTraveled = distTraveled_func(velocity, angle, timeGround);
+    displayResult(timeMax, heightMax, timeGround, distTraveled);
+
+    return (0);
+}
+
+double userInput(double *hei, double *vel, double *ang)
+{
+    printf("Enter height of launch [m] -> ");
+    scanf("%lf", &*hei);
+    printf("Enter initial velocity [m/s] -> ");
+    scanf("%lf", &*vel);
+    printf("Enter angle to the horizontal [degrees] -> ");
+    scanf("%lf", &*ang);
+}
+
+double timeMax_func(double vel, double ang)
+{
+    double result;
+    
+    result = (vel * sin(ang * (M_PI / 180))) / 9.8;
+    
+    return(result);
+}
+
+double heightMax_func(double hei, double vel, double ang, double tim)
+{
+    double result;
+    
+    result = hei + (vel * sin(ang * (M_PI / 180)) * tim) - (0.5 * 9.8 * pow(tim, 2));
+    
+    return(result);
+}
+
+double timeGround_func(double heiI, double vel, double ang)
+{
+    double result;
+    
+    result = (vel * sin(ang * (M_PI / 180)) + sqrt(pow(vel, 2) * pow(sin(ang * (M_PI / 180)), 2) + 2 * 9.8 * heiI))/ 9.8; //might need to change height
+    
+    return(result);
+}
+
+double distTraveled_func(double vel, double ang, double tim)
+{
+    double result;
+    
+    result = vel * cos(ang * (M_PI / 180)) * tim;
+    
+    return(result);
+}
+
+double displayResult(double timM, double heiM, double timG, double distT)
+{
+    printf("\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+    printf("Time to max height: %19.2lf s\n", timM);
+    printf("Maximum height reached: %15.2lf m\n", heiM);
+    printf("Time to hit ground: %19.2lf s\n", timG);
+    printf("Total distance traveled: %14.2lf m\n", distT);
+    printf("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n");
+}
